@@ -42,7 +42,7 @@ const usuarioPorCorreo = async (req, res) => {
 
 const crearUsuario = async (req, res) => {
   try {
-    const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol } = req.body;
+    const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = req.body;
 
  // Verificar si ya existe un usuario con el mismo ID
  const usuarioExistente = await UsuarioModel.usuarioPorIdentificacion(identificacion);
@@ -65,13 +65,14 @@ const crearUsuario = async (req, res) => {
         telefono,
         direccion,
         correo,
-        contrasenia: hashContrasenia, // Utiliza el hash de la contraseña
-        rol
+        contrasenia: hashContrasenia,
+        rol_id
       };
     await UsuarioModel.crearUsuario(usuario);
     res.send('Usuario creado');
   } catch (e) {
     httpError(res, e);
+    console.log(e)
   }
 };
 

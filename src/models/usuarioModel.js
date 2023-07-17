@@ -1,7 +1,7 @@
 const pool = require('../../config/db');
 
 const getUsuarios = async () => {
-  const query = 'SELECT * FROM usuarios';
+  const query = 'SELECT u.*, r.nombre_rol FROM usuarios u INNER JOIN roles r ON u.rol_id = r.id_rol';
   const response = await pool.query(query);
   return response.rows;
 };
@@ -26,9 +26,9 @@ const usuarioPorIdentificacion = async (identificacion) => {
 
 
 const crearUsuario = async (usuario) => {
-  const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol } = usuario;
-  const query = 'INSERT INTO usuarios (identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
-  const values = [identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol];
+  const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = usuario;
+  const query = 'INSERT INTO usuarios (identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+  const values = [identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id];
   await pool.query(query, values);
 };
 
