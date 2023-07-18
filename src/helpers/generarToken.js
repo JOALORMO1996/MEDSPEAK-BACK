@@ -8,7 +8,7 @@ const tokenSign = async (usuario) => {
       },
       'secreto',
       {
-        expiresIn: '2h'
+        expiresIn: '12h'
       }
     );
   };

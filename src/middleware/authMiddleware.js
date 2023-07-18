@@ -12,7 +12,6 @@ const authMiddleware = async (req, res, next) => {
   try {
     // Verificar el token
     const decodedToken = await verifyToken(token);
-    console.log(decodedToken)
     if (!decodedToken) {
       return res.status(401).json({ mensaje: 'Token de autenticación inválido' });
     }
