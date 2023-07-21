@@ -25,13 +25,6 @@ const login = async (req, res) => {
       return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
     }
 
-
-   // Verificar el rol del usuario
-   if (usuario.rol_id === 3) {
-    return res.status(403).json({ mensaje: 'Acceso denegado' });
-  }
-    
-
     // Generar un token 
      const token = await tokenSign(usuario);
 

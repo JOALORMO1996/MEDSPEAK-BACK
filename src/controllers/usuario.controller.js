@@ -69,7 +69,7 @@ const crearUsuario = async (req, res) => {
         rol_id
       };
     await UsuarioModel.crearUsuario(usuario);
-    res.send('Usuario creado');
+    res.json({ mensaje: 'Usuario creado exitosamente' });
   } catch (e) {
     httpError(res, e);
     console.log(e)

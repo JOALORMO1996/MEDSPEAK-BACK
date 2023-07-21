@@ -1,7 +1,7 @@
 const pool = require('../../config/db');
 
 const getUsuarios = async () => {
-  const query = 'SELECT u.*, r.nombre_rol FROM usuarios u INNER JOIN roles r ON u.rol_id = r.id_rol';
+  const query = 'SELECT u.*, r.nombre_rol FROM usuarios u INNER JOIN roles r ON u.rol_id = r.id_rol ORDER BY u.id DESC';
   const response = await pool.query(query);
   return response.rows;
 };
