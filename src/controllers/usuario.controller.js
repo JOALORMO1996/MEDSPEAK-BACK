@@ -69,7 +69,7 @@ const crearUsuario = async (req, res) => {
         rol_id
       };
     await UsuarioModel.crearUsuario(usuario);
-    res.json({ mensaje: 'Usuario creado exitosamente' });
+    res.json({ mensaje: 'Usuario creado correctamente.' });
   } catch (e) {
     httpError(res, e);
     console.log(e)
@@ -78,9 +78,60 @@ const crearUsuario = async (req, res) => {
 
 
 
+const editarUsuario = async (req, res) => {
+  try {
+    const { id } = req.params; 
+    const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = req.body;
+
+    // Verificar si el usuario existe en la base de datos
+    const usuarioExistente = await UsuarioModel.usuarioPorId(id);
+  
+    if (!usuarioExistente) {
+      return res.status(404).json({ mensaje: 'El usuario no se encuentra en el sistema.'});
+    }
+
+    // Verificar si ya existe otro usuario con el mismo Correo
+    const correoExistente = await UsuarioModel.usuarioPorCorreo(correo);
+    // Verificar que el correo existente sea diferente del correo a actualizar
+    if (correoExistente && correoExistente.id != id) {
+      return res.status(409).json({ mensaje: 'El correo electrónico ya se encuentra registrado en el sistema.'});
+    }
+
+    // Generar el hash de la nueva contraseña (si se proporciona)
+    let hashContrasenia;
+    if (contrasenia) {
+      hashContrasenia = await bcrypt.hash(contrasenia, 10);
+    }
+
+    // Crear un objeto con los campos actualizados del usuario
+    const usuarioActualizado = {
+      id,
+      identificacion,
+      nombre,
+      apellido,
+      telefono,
+      direccion,
+      correo,
+      // Si se proporcionó una nueva contraseña, agregarla al objeto actualizado
+      ...(hashContrasenia && { contrasenia: hashContrasenia }),
+      rol_id,
+    };
+
+    // Actualizar el usuario en la base de datos
+    await UsuarioModel.editarUsuario(usuarioActualizado);
+    
+    // Enviar la respuesta con el mensaje de éxito
+    res.json({ mensaje: 'Usuario actualizado correctamente.' });
+  } catch (e) {
+    // Manejo de errores
+    console.error(e);
+    res.status(500).json({ mensaje: 'Error al procesar la solicitud' });
+  }
+};
 module.exports = {
   getUsuario,
   usuarioPorId,
   usuarioPorCorreo,
-  crearUsuario
+  crearUsuario,
+  editarUsuario
 };

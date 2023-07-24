@@ -32,10 +32,23 @@ const crearUsuario = async (usuario) => {
   await pool.query(query, values);
 };
 
+const editarUsuario = async (usuario) => {
+  try {
+    const {id, identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = usuario;
+    const query = 'UPDATE usuarios SET identificacion = $2, nombre = $3, apellido = $4, telefono = $5, direccion = $6, correo = $7, contrasenia = $8, rol_id = $9 WHERE id = $1';
+    const values = [id, identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id];
+    await pool.query(query, values);
+  } catch (error) { 
+    console.error('Error al actualizar el usuario:', error);
+    throw error; 
+  }
+};
+
 module.exports = {
   getUsuarios,
   usuarioPorId,
   usuarioPorCorreo,
   usuarioPorIdentificacion,
-  crearUsuario
+  crearUsuario,
+  editarUsuario
 };
