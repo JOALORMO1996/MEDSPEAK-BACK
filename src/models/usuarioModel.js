@@ -26,10 +26,16 @@ const usuarioPorIdentificacion = async (identificacion) => {
 
 
 const crearUsuario = async (usuario) => {
-  const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = usuario;
-  const query = 'INSERT INTO usuarios (identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
-  const values = [identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id];
-  await pool.query(query, values);
+  try{
+    const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = usuario;
+    const query = 'INSERT INTO usuarios (identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)';
+    const values = [identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id];
+    await pool.query(query, values);
+  }
+  catch (error) { 
+    console.error('Error al crear el usuario:', error);
+    throw error; 
+  }
 };
 
 const editarUsuario = async (usuario) => {
@@ -44,11 +50,35 @@ const editarUsuario = async (usuario) => {
   }
 };
 
+const inactivarUsuario = async(id) => {
+  try{
+  const query = 'UPDATE usuarios SET estado = $2 WHERE id = $1';
+  const values = [id, false];
+    await pool.query(query, values);
+  }catch (error) { 
+    console.error('Error al actualizar el usuario:', error);
+    throw error; 
+  }
+};
+
+const activarUsuario = async(id) => {
+  try{
+  const query = 'UPDATE usuarios SET estado = $2 WHERE id = $1';
+  const values = [id, true];
+    await pool.query(query, values);
+  }catch (error) { 
+    console.error('Error al actualizar el usuario:', error);
+    throw error; 
+  }
+};
+
 module.exports = {
   getUsuarios,
   usuarioPorId,
   usuarioPorCorreo,
   usuarioPorIdentificacion,
   crearUsuario,
-  editarUsuario
+  editarUsuario,
+  inactivarUsuario, 
+  activarUsuario
 };

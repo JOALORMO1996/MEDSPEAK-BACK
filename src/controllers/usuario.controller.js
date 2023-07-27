@@ -120,18 +120,43 @@ const editarUsuario = async (req, res) => {
     // Actualizar el usuario en la base de datos
     await UsuarioModel.editarUsuario(usuarioActualizado);
     
-    // Enviar la respuesta con el mensaje de éxito
+    
     res.json({ mensaje: 'Usuario actualizado correctamente.' });
   } catch (e) {
-    // Manejo de errores
+   
     console.error(e);
     res.status(500).json({ mensaje: 'Error al procesar la solicitud' });
   }
 };
+
+const inactivarUsuario = async( req, res) => {
+  const { id } = req.params;
+  try {
+    await UsuarioModel.inactivarUsuario(id);
+    res.json({ mensaje: 'Usuario inactivado correctamente' });
+  } catch (error) {
+    console.error('Error al inactivar el usuario:', error);
+    res.status(500).json({ mensaje: 'Error al inactivar el usuario' });
+  }
+};
+
+const activarUsuario = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await UsuarioModel.activarUsuario(id);
+    res.json({ mensaje: 'Usuario activado correctamente' });
+  } catch (error) {
+    console.error('Error al activar el usuario:', error);
+    res.status(500).json({ mensaje: 'Error al activar el usuario' });
+  }
+};
+
 module.exports = {
   getUsuario,
   usuarioPorId,
   usuarioPorCorreo,
   crearUsuario,
-  editarUsuario
+  editarUsuario,
+  inactivarUsuario,
+  activarUsuario
 };
