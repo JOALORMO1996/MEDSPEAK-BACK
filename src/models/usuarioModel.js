@@ -7,21 +7,21 @@ const getUsuarios = async () => {
 };
 
 const usuarioPorId = async (id) => {
-  const query = 'SELECT * FROM usuarios WHERE id = $1';
+  const query = 'SELECT id, identificacion, nombre, apellido, telefono, direccion, correo, rol_id, estado  FROM usuarios WHERE id = $1';
   const result = await pool.query(query, [id]);
   return result.rows[0]; // Devuelve el primer resultado encontrado
 };
 
 const usuarioPorCorreo = async (correo) => {
-  const query = 'SELECT * FROM usuarios WHERE correo = $1';
+  const query = 'SELECT id, identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id, estado  FROM usuarios WHERE correo = $1';
   const result = await pool.query(query, [correo]);
-  return result.rows[0]; // Devuelve el primer resultado encontrado
+  return result.rows[0]; 
 };
 
 const usuarioPorIdentificacion = async (identificacion) => {
-  const query = 'SELECT * FROM usuarios WHERE identificacion = $1';
+  const query = 'SELECT id, identificacion, nombre, apellido, telefono, direccion, correo, rol_id, estado  FROM usuarios WHERE identificacion = $1';
   const result = await pool.query(query, [identificacion]);
-  return result.rows[0]; // Devuelve el primer resultado encontrado
+  return result.rows[0]; 
 };
 
 

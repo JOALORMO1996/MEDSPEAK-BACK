@@ -2,7 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const usuarioRoutes = require('./src/routes/usuarioRoutes.js');
 const autenticacionRoutes = require('./src/routes/autenticacionRoutes.js');
-const rolRoutes = require('./src/routes/rolRoutes.js')
+const rolRoutes = require('./src/routes/rolRoutes.js');
+const pacienteRoutes = require('./src/routes/pacienteRoutes.js');
 const dotenv = require('dotenv');
 const db = require('./config/db.js');
 
@@ -28,6 +29,7 @@ app.use((req, res, next) => {
 app.use(usuarioRoutes);
 app.use(autenticacionRoutes);
 app.use(rolRoutes);
+app.use(pacienteRoutes);
 
 
 // Definir un puerto y arrancar el proyecto
