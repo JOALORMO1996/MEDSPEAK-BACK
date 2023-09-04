@@ -1,7 +1,7 @@
 const pool = require('../../config/db');
 
 const getUsuarios = async () => {
-  const query = 'SELECT u.*, r.nombre_rol FROM usuarios u INNER JOIN roles r ON u.rol_id = r.id_rol ORDER BY u.id DESC';
+  const query = 'SELECT u.*, r.nombre_rol FROM usuarios u INNER JOIN roles r ON u.rol_id = r.id_rol ORDER BY u.estado DESC, u.id DESC';
   const response = await pool.query(query);
   return response.rows;
 };
@@ -72,6 +72,55 @@ const activarUsuario = async(id) => {
   }
 };
 
+const insertPasswordResetToken = async (usuarioId, token, expiration) => {
+  try {
+    const query = 'INSERT INTO password_reset_tokens (user_id, token, expiration) VALUES ($1, $2, $3)';
+    const values = [usuarioId, token, expiration];
+    await pool.query(query, values);
+  } catch (error) {
+    console.error('Error al insertar el token de restablecimiento:', error);
+    throw error;
+  }
+};
+
+const getToken = async (token) => {
+  const query = 'SELECT id, user_id, token, expiration FROM password_reset_tokens WHERE token = $1';
+  const result = await pool.query(query, [token]);
+  return result.rows[0]; 
+};
+const editarContrasenia = async (usuarioId, contrasenia) => {
+  try {
+    const query = 'UPDATE usuarios SET contrasenia = $2 WHERE id = $1';
+    const values = [usuarioId, contrasenia];
+    await pool.query(query, values);
+  } catch (error) { 
+    console.error('Error al actualizar la contraseña:', error);
+    throw error; 
+  }
+};
+
+const eliminarToken = async (tokenId) => {
+  try {
+    const query = 'DELETE FROM password_reset_tokens WHERE id = $1';
+     await pool.query(query, [tokenId]);
+  } catch (error) {
+    console.error('Error al eliminar el token:', error);
+    throw error;
+  }
+};
+
+const eliminarTokensExpirados = async () => {
+  try {
+    const currentDate = new Date();
+    const query = 'DELETE FROM password_reset_tokens WHERE expiration < $1';
+    const values = [currentDate];
+
+    const response = await pool.query(query, values);
+    console.log(`${response.rowCount} tokens expirados eliminados.`);
+  } catch (error) {
+    console.error('Error al eliminar tokens expirados', error);
+  }
+};
 module.exports = {
   getUsuarios,
   usuarioPorId,
@@ -80,5 +129,10 @@ module.exports = {
   crearUsuario,
   editarUsuario,
   inactivarUsuario, 
-  activarUsuario
+  activarUsuario,
+  insertPasswordResetToken,
+  getToken,
+  editarContrasenia,
+  eliminarToken,
+  eliminarTokensExpirados
 };

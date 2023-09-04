@@ -6,6 +6,7 @@ const rolRoutes = require('./src/routes/rolRoutes.js');
 const pacienteRoutes = require('./src/routes/pacienteRoutes.js');
 const dotenv = require('dotenv');
 const db = require('./config/db.js');
+const taskSchedulerController = require('./src/controllers/tareaProgramada.controller.js');
 
 // Configura las variables de entorno desde el archivo .env
 dotenv.config({ path: '.env' });
@@ -32,9 +33,13 @@ app.use(rolRoutes);
 app.use(pacienteRoutes);
 
 
+
+
+taskSchedulerController.startTaskScheduler();
+
 // Definir un puerto y arrancar el proyecto
 const port = 3000;
 
-app.listen(port, () => {
+app.listen(port, 'localhost', () => {
   console.log(`El servidor está funcionando en el puerto ${port}`);
 });

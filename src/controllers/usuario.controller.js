@@ -40,6 +40,11 @@ const usuarioPorCorreo = async (req, res) => {
   }
 };
 
+const isStrongPassword = (password) => {
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{6,}$/;
+  return passwordRegex.test(password);
+};
+
 const crearUsuario = async (req, res) => {
   try {
     const { identificacion, nombre, apellido, telefono, direccion, correo, contrasenia, rol_id } = req.body;
@@ -53,6 +58,16 @@ const crearUsuario = async (req, res) => {
     const correoExistente = await UsuarioModel.usuarioPorCorreo(correo);
     if (correoExistente) {
       return res.status(409).json({ mensaje: 'El correo electronico ya se encuentra registrado en el sistema.'});
+    }
+
+    const correoValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!correoValido.test(correo)) {
+      return res.status(400).json({ mensaje: 'Por favor Ingrese una dirección de correo electrónico válida.' });
+    }
+
+    //Verifica si la contraseña cumple los requisitos
+    if (!isStrongPassword(contrasenia)) {
+      return res.status(409).json({ mensaje: 'La contraseña debe tener al menos 6 caracteres e incluir al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.' });
     }
 
       // Generar el hash de la contraseña
@@ -96,7 +111,15 @@ const editarUsuario = async (req, res) => {
     if (correoExistente && correoExistente.id != id) {
       return res.status(409).json({ mensaje: 'El correo electrónico ya se encuentra registrado en el sistema.'});
     }
+    const correoValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!correoValido.test(correo)) {
+      return res.status(400).json({ mensaje: 'Por favor Ingrese una dirección de correo electrónico válida.' });
+    }
 
+    //Verifica si la contraseña cumple los requisitos
+    if (!isStrongPassword(contrasenia)) {
+      return res.status(409).json({ mensaje: 'La contraseña debe tener al menos 6 caracteres e incluir al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.' });
+    }
     // Generar el hash de la nueva contraseña (si se proporciona)
     let hashContrasenia;
     if (contrasenia) {

@@ -41,6 +41,11 @@ const getPacientes = async (req, res) => {
       if (correoExistente) {
         return res.status(409).json({ mensaje: 'El correo electronico ya se encuentra registrado en el sistema.'});
       }
+
+      const correoValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!correoValido.test(correo)) {
+        return res.status(400).json({ mensaje: 'Por favor Ingrese una dirección de correo electrónico válida.' });
+      }
   
         const paciente = {
           identificacion, 
@@ -76,6 +81,11 @@ const getPacientes = async (req, res) => {
       // Verificar que el correo existente sea diferente del correo a actualizar
       if (correoExistente && correoExistente.id != id) {
         return res.status(409).json({ mensaje: 'El correo electrónico ya se encuentra registrado en el sistema.'});
+      }
+
+      const correoValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!correoValido.test(correo)) {
+        return res.status(400).json({ mensaje: 'Por favor Ingrese una dirección de correo electrónico válida.' });
       }
   
       // Crear un objeto con los campos actualizados del paciente
