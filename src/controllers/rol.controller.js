@@ -4,8 +4,8 @@ const rolModel = require('../models/rolModel');
 
 const getRoles = async (req, res) => {
     try {
-      const usuarios = await rolModel.getRoles();
-      res.status(200).json(usuarios);
+      const roles = await rolModel.getRoles();
+      res.status(200).json(roles);
     } catch (e) {
       console.error(error);
       httpError(res, e);

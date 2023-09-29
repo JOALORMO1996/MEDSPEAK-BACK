@@ -4,6 +4,8 @@ const usuarioRoutes = require('./src/routes/usuarioRoutes.js');
 const autenticacionRoutes = require('./src/routes/autenticacionRoutes.js');
 const rolRoutes = require('./src/routes/rolRoutes.js');
 const pacienteRoutes = require('./src/routes/pacienteRoutes.js');
+const departamentoRoutes = require('./src/routes/departamentoRoutes.js');
+const ciudadRouter = require('./src/routes/ciudadRouter.js');
 const dotenv = require('dotenv');
 const db = require('./config/db.js');
 const taskSchedulerController = require('./src/controllers/tareaProgramada.controller.js');
@@ -31,6 +33,8 @@ app.use(usuarioRoutes);
 app.use(autenticacionRoutes);
 app.use(rolRoutes);
 app.use(pacienteRoutes);
+app.use(departamentoRoutes);
+app.use(ciudadRouter);
 
 
 

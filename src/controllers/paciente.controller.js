@@ -29,7 +29,7 @@ const getPacientes = async (req, res) => {
 
   const crearPaciente = async (req, res) => {
     try {
-      const { identificacion, nombre, apellido, fecha_nacimiento, telefono, direccion, correo } = req.body;
+      const { identificacion, nombre, apellido, fecha_nacimiento, telefono, departamento, ciudad, direccion, estado_civil, ocupacion, asegurador, afiliacion, correo } = req.body;
   
    // Verificar si ya existe un paciente con el mismo ID
    const pacienteExistente = await pacienteModel.pacientePorIdentificacion(identificacion);
@@ -51,9 +51,14 @@ const getPacientes = async (req, res) => {
           identificacion, 
           nombre,
           apellido, 
-          fecha_nacimiento,
-          telefono,
-          direccion,
+          fecha_nacimiento, 
+          telefono, 
+          departamento, 
+          ciudad, direccion, 
+          estado_civil, 
+          ocupacion, 
+          asegurador, 
+          afiliacion, 
           correo
         };
       await pacienteModel.crearPaciente(paciente);
@@ -67,7 +72,7 @@ const getPacientes = async (req, res) => {
   const editarPaciente = async (req, res) => {
     try {
       const { id } = req.params; 
-      const { identificacion, nombre, apellido, fecha_nacimiento, telefono, direccion, correo } = req.body;
+      const { identificacion, nombre, apellido, fecha_nacimiento, telefono, departamento, ciudad, direccion, estado_civil, ocupacion, asegurador, afiliacion, correo } = req.body;
   
       // Verificar si el paciente existe en la base de datos
       const pacienteExistente = await pacienteModel.pacientePorId(id);
@@ -91,12 +96,17 @@ const getPacientes = async (req, res) => {
       // Crear un objeto con los campos actualizados del paciente
       const pacienteActualizado = {
         id,
-        identificacion,
+        identificacion, 
         nombre,
-        apellido,
-        fecha_nacimiento,
-        telefono,
-        direccion,
+        apellido, 
+        fecha_nacimiento, 
+        telefono, 
+        departamento, 
+        ciudad, direccion, 
+        estado_civil, 
+        ocupacion, 
+        asegurador, 
+        afiliacion, 
         correo
       };
   
@@ -134,12 +144,24 @@ const getPacientes = async (req, res) => {
     }
   };
 
+
+  const getEstadoCivil = async (req, res) => {
+    try {
+      const estado_civil = await pacienteModel.getEstadoCivil();
+      res.status(200).json(estado_civil);
+    } catch (e) {
+      console.error(error);
+      httpError(res, e);
+    }
+  };
+
   module.exports = {
     getPacientes,
     pacientePorId,
     crearPaciente,
     editarPaciente,
     inactivarPaciente,
-    activarPaciente
+    activarPaciente,
+    getEstadoCivil
     
   };
